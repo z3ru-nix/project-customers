@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException  } from '@nestjs/common';
 import { UpsertEmailDTO } from './dto/Upsert-cliente.dto';
 
 @Injectable()
@@ -38,18 +38,24 @@ export class CustomersService {
        
         return {message: "email valido!", email: newEmail};
     }
-    update(id:number, emails: UpsertEmailDTO){
+    update(id: number, emailDto: UpsertEmailDTO){  
         const index = this.emails.findIndex((e) => e.id === id);
-        this.emails[index] = {
-            'id': this.emails[index].id,
-            ...emails
-
-
+     
+        if (index === -1) {
+            throw new NotFoundException(`Email com ID ${id} não encontrado.`);
         }
-        
-            
-        
+     
+        const updatedEmail = {
+            'id': this.emails[index].id, 
+            ...emailDto                  
+        };
+    
+        this.emails[index] = updatedEmail; 
+    
+       
+        return { message: `Email com ID ${id} atualizado com sucesso!`, email: updatedEmail };
     }
+
 }
 
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put ,ParseIntPipe } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import {   UpsertEmailDTO } from './dto/Upsert-cliente.dto';
 
@@ -16,8 +16,11 @@ export class CustomersController {
         return this.customersService.create(emailbody);
     }
     @Put(':id')
-    update(@Param('id') customersID: number, @Body() updatebody: UpsertEmailDTO){
-        return this.customersService.update(customersID,updatebody);
+    update(
+        @Param('id', ParseIntPipe) id: number,  
+        @Body() emailDto: UpsertEmailDTO,
+    ) {
+        return this.customersService.update(id, emailDto);
     }
     @Delete('/')
     removeAll(){
