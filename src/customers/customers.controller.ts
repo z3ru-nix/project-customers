@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CustomersService } from './customers.service';
-import { CreateEmailDTO } from './dto/create-cliente.dto';
+import {   UpsertEmailDTO } from './dto/Upsert-cliente.dto';
 
 @Controller('customers')
 export class CustomersController {
@@ -12,12 +12,12 @@ export class CustomersController {
     }
 
     @Post('/')
-    create(@Body() emailbody: CreateEmailDTO) {
+    create(@Body() emailbody: UpsertEmailDTO ) {
         return this.customersService.create(emailbody);
     }
-    @Put('/')
-    update(){
-        return {message: "nota de upadate de email"}
+    @Put(':id')
+    update(@Param('id') customersID: number, @Body() updatebody: UpsertEmailDTO){
+        return this.customersService.update(customersID,updatebody);
     }
     @Delete('/')
     removeAll(){

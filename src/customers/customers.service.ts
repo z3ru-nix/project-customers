@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEmailDTO } from './dto/create-cliente.dto';
+import { UpsertEmailDTO } from './dto/Upsert-cliente.dto';
 
 @Injectable()
 export class CustomersService {
     private emails;
 
     constructor() {
-        this.emails= [
+        this.emails = [
         {
             "id": 1,
             "email": "Isabelathings44@gmail.com"
@@ -21,12 +21,13 @@ export class CustomersService {
     findAll() {
         return this.emails;
     }
+     
     removeAll(){
         this.emails= [];
         return{message: "todos os emails foram removidos!"}
     }
 
-    create(email: CreateEmailDTO) {
+    create(email: UpsertEmailDTO ) {
         // last id porque eu quero controlar o próximo id
         const last_id: number = this.emails[this.emails.length - 1].id;
         const newEmail= {
@@ -36,6 +37,18 @@ export class CustomersService {
         this.emails.push(newEmail);
        
         return {message: "email valido!", email: newEmail};
+    }
+    update(id:number, emails: UpsertEmailDTO){
+        const index = this.emails.findIndex((e) => e.id === id);
+        this.emails[index] = {
+            'id': this.emails[index].id,
+            ...emails
+
+
+        }
+        
+            
+        
     }
 }
 
